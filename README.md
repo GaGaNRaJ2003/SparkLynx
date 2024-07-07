@@ -89,7 +89,7 @@ Throughout the development phase, the focus of SparkLynx will be on user-centric
 
 5. Run the application:
    ```sh
-   python main.py
+   python sparklynx.py
    ```
 
 ## Usage
