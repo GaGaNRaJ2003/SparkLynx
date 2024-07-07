@@ -1,0 +1,199 @@
+Sparklynx
+
+-Chahat(2022138)
+-Gagan (2022183)
+-Nikita (2022323)
+
+create database sparklynx;
+use sparklynx;
+
+CREATE TABLE USERS (
+    UserID INT PRIMARY KEY,
+    Username VARCHAR(255) UNIQUE NOT NULL,
+    Password VARCHAR(255) NOT NULL,
+    Name VARCHAR(255) NOT NULL,
+    ContactDetails VARCHAR(255) NOT NULL,
+    UserType VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE ORDERS (
+    OrderID INT PRIMARY KEY,
+    UserID INT,
+    PickupLocation VARCHAR(255) NOT NULL,
+    DropOffLocation VARCHAR(255) NOT NULL,
+    DeliveryTime DATETIME NOT NULL,
+    AdditionalInstructions TEXT,
+    FOREIGN KEY (UserID) REFERENCES USERS(UserID)
+);
+
+CREATE TABLE TRACKING (
+    TrackingID INT PRIMARY KEY,
+    OrderID INT,
+    Status VARCHAR(255) NOT NULL,
+    Location VARCHAR(255) NOT NULL,
+    LastUpdated TIMESTAMP,
+    FOREIGN KEY (OrderID) REFERENCES ORDERS(OrderID)
+);
+
+CREATE TABLE DELIVERY_ASSIGNMENT (
+    AssignmentID INT PRIMARY KEY,
+    OrderID INT,
+    DeliveryPartnerID INT,
+    FOREIGN KEY (OrderID) REFERENCES ORDERS(OrderID)
+);
+
+CREATE TABLE RATINGS (
+    RatingID INT PRIMARY KEY,
+    UserID INT,
+    OrderID INT,
+    Rating INT NOT NULL,
+    Feedback TEXT,
+    FOREIGN KEY (UserID) REFERENCES USERS(UserID),
+    FOREIGN KEY (OrderID) REFERENCES ORDERS(OrderID)
+);
+
+CREATE TABLE PAYMENTS (
+    PaymentID INT PRIMARY KEY,
+    OrderID INT,
+    Amount DECIMAL(10, 2) NOT NULL,
+    PaymentMethod VARCHAR(255) NOT NULL,
+    TransactionTime TIMESTAMP,
+    FOREIGN KEY (OrderID) REFERENCES ORDERS(OrderID)
+);
+
+CREATE TABLE PROMOTIONS (
+    PromotionID INT PRIMARY KEY,
+    Description TEXT,
+    DiscountAmount DECIMAL(10, 2) NOT NULL,
+    StartDate DATE,
+    EndDate DATE
+);
+
+CREATE TABLE CUSTOMER_SUPPORT (
+    TicketID INT PRIMARY KEY,
+    UserID INT,
+    IssueDescription TEXT,
+    Status VARCHAR(50),
+    Resolution TEXT,
+    FOREIGN KEY (UserID) REFERENCES USERS(UserID)
+);
+
+CREATE TABLE ADMIN (
+    AdminID INT PRIMARY KEY,
+    Password VARCHAR(255) NOT NULL
+);
+
+
+
+INSERT INTO USERS (UserID, Username, Password, Name, ContactDetails, UserType) VALUES
+    (1, 'raj_patel', 'rajpatel123', 'Raj Patel', '987-654-3210', 'Customer'),
+    (2, 'smita_sharma', 'smitasharma456', 'Smita Sharma', '987-654-3211', 'Customer'),
+    (3, 'anil_kumar', 'anilkumar789', 'Anil Kumar', '987-654-3212', 'Customer'),
+    (4, 'meera_gupta', 'meeragupta012', 'Meera Gupta', '987-654-3213', 'Delivery'),
+    (5, 'arjun_singh', 'arjunsingh345', 'Arjun Singh', '987-654-3214', 'Customer'),
+    (6, 'priya_khan', 'priyakhan678', 'Priya Khan', '987-654-3215', 'Admin'),
+    (7, 'vivek_reddy', 'vivekreddy901', 'Vivek Reddy', '987-654-3216', 'Customer'),
+    (8, 'nisha_iyer', 'nishaiyer234', 'Nisha Iyer', '987-654-3217', 'Delivery'),
+    (9, 'aman_verma', 'amanverma567', 'Aman Verma', '987-654-3218', 'Customer'),
+    (10, 'ritu_das', 'ritudas890', 'Ritu Das', '987-654-3219', 'Customer');
+
+
+INSERT INTO ADMIN (AdminID, Password) VALUES
+    (1, 'adminpass1'),
+    (2, 'adminpass2'),
+    (3, 'adminpass3'),
+    (4, 'adminpass4'),
+    (5, 'adminpass5'),
+    (6, 'adminpass6'),
+    (7, 'adminpass7'),
+    (8, 'adminpass8'),
+    (9, 'adminpass9'),
+    (10, 'adminpass10');
+
+INSERT INTO PROMOTIONS (PromotionID, Description, DiscountAmount, StartDate, EndDate) VALUES
+    (1, 'Spring Sale', 10.00, '2024-03-01', '2024-03-31'),
+    (2, 'Summer Special', 15.00, '2024-06-01', '2024-06-30'),
+    (3, 'Autumn Discount', 20.00, '2024-09-01', '2024-09-30'),
+    (4, 'Winter Deal', 25.00, '2024-12-01', '2024-12-31'),
+    (5, 'New Year Offer', 30.00, '2025-01-01', '2025-01-10'),
+    (6, 'Valentine Promo', 5.00, '2025-02-14', '2025-02-15'),
+    (7, 'Easter Eggstravaganza', 10.00, '2025-04-05', '2025-04-06'),
+    (8, 'Thanksgiving Thanks', 20.00, '2025-11-27', '2025-11-28'),
+    (9, 'Holiday Cheer', 15.00, '2025-12-25', '2026-01-01'),
+    (10, 'Back to School', 10.00, '2025-08-15', '2025-09-15');
+
+INSERT INTO ORDERS (OrderID, UserID, PickupLocation, DropOffLocation, DeliveryTime, AdditionalInstructions) VALUES
+    (1, 1, '123 Start St', '456 End Ave', '2024-02-12 10:00:00', 'Leave at front door.'),
+    (2, 2, '789 Begin Blvd', '1011 Finish Rd', '2024-02-13 11:00:00', 'Ring bell twice.'),
+    (3, 3, '1213 Commence Ct', '1415 Cease Cr', '2024-02-14 12:00:00', 'Call upon arrival.'),
+    (4, 4, '1617 Initiate Ln', '1819 Halt Hwy', '2024-02-15 13:00:00', 'Deliver to side door.'),
+    (5, 5, '2021 Launch Ave', '2223 Stop St', '2024-02-16 14:00:00', 'Leave in mail room.'),
+    (6, 1, '2425 Embark Rd', '2627 Pause Pl', '2024-02-17 15:00:00', 'Deliver to back porch.'),
+    (7, 2, '2829 Depart Dr', '3031 Rest Rd', '2024-02-18 16:00:00', 'Deliver to reception.'),
+    (8, 3, '3233 Set Off St', '3435 Break Blvd', '2024-02-19 17:00:00', 'Leave with neighbor.'),
+    (9, 4, '3637 Start Out St', '3839 Relax Ave', '2024-02-20 18:00:00', 'Deliver to garage.'),
+    (10, 5, '4041 Go Ln', '4243 Unwind Ul', '2024-02-21 19:00:00', 'Leave at back gate.');
+
+INSERT INTO PAYMENTS (PaymentID, OrderID, Amount, PaymentMethod, TransactionTime) VALUES
+    (1, 1, 50.00, 'Credit Card', '2024-02-12 10:05:00'),
+    (2, 2, 70.00, 'PayPal', '2024-02-13 11:10:00'),
+    (3, 3, 30.00, 'Debit Card', '2024-02-14 12:15:00'),
+    (4, 4, 20.00, 'Credit Card', '2024-02-15 13:20:00'),
+    (5, 5, 100.00, 'Cash', '2024-02-16 14:25:00'),
+    (6, 6, 60.00, 'Credit Card', '2024-02-17 15:30:00'),
+    (7, 7, 80.00, 'PayPal', '2024-02-18 16:35:00'),
+    (8, 8, 40.00, 'Debit Card', '2024-02-19 17:40:00'),
+    (9, 9, 90.00, 'Credit Card', '2024-02-20 18:45:00'),
+    (10, 10, 110.00, 'Cash', '2024-02-21 19:50:00');
+
+INSERT INTO RATINGS (RatingID, UserID, OrderID, Rating, Feedback) VALUES
+    (1, 1, 1, 5, 'Excellent service.'),
+    (2, 2, 2, 4, 'Good delivery, but late.'),
+    (3, 3, 3, 3, 'Average experience.'),
+    (4, 4, 4, 2, 'Late delivery, food was cold.'),
+    (5, 5, 5, 1, 'Unsatisfied with the service.'),
+    (6, 6, 6, 5, 'Very prompt and courteous.'),
+    (7, 7, 7, 4, 'Great! But a bit pricey.'),
+    (8, 8, 8, 3, 'Okay service.'),
+    (9, 9, 9, 2, 'Not happy with the packaging.'),
+    (10, 10, 10, 1, 'Order was incomplete.');
+
+INSERT INTO TRACKING (TrackingID, OrderID, Status, Location, LastUpdated) VALUES
+    (1, 1, 'In Transit', 'Location A', '2024-02-01 10:30:00'),
+    (2, 2, 'Delivered', 'Location B', '2024-02-01 11:00:00'),
+    (3, 3, 'Out for Delivery', 'Location C', '2024-02-01 12:00:00'),
+    (4, 4, 'In Transit', 'Location D', '2024-02-01 09:00:00'),
+    (5, 5, 'Processing', 'Location E', '2024-02-01 08:45:00'),
+    (6, 6, 'Delivered', 'Location F', '2024-02-01 13:30:00'),
+    (7, 7, 'Out for Delivery', 'Location G', '2024-02-01 14:00:00'),
+    (8, 8, 'In Transit', 'Location H', '2024-02-01 15:00:00'),
+    (9, 9, 'Processing', 'Location I', '2024-02-01 16:00:00'),
+    (10, 10, 'Delivered', 'Location J', '2024-02-01 17:00:00');
+
+INSERT INTO CUSTOMER_SUPPORT (TicketID, UserID, IssueDescription, Status, Resolution) VALUES
+    (1, 1, 'Issue with order delivery', 'Open', 'Pending'),
+    (2, 2, 'Payment not processed', 'Closed', 'Refunded'),
+    (3, 3, 'Incorrect order received', 'Open', 'Pending'),
+    (4, 4, 'Promo code not applied', 'Closed', 'Discount applied'),
+    (5, 5, 'Late delivery', 'Open', 'Pending'),
+    (6, 6, 'Order not received', 'Closed', 'Resent order'),
+    (7, 7, 'Damaged product complaint', 'Open', 'Pending'),
+    (8, 8, 'Change of delivery address', 'Closed', 'Address updated'),
+    (9, 9, 'Cannot track order', 'Open', 'Pending'),
+    (10, 10, 'Query about product', 'Closed', 'Information provided');
+
+INSERT INTO DELIVERY_ASSIGNMENT (AssignmentID, OrderID, DeliveryPartnerID) VALUES
+    (1, 1, 101),
+    (2, 2, 102),
+    (3, 3, 103),
+    (4, 4, 104),
+    (5, 5, 105),
+    (6, 6, 106),
+    (7, 7, 107),
+    (8, 8, 108),
+    (9, 9, 109),
+    (10, 10, 110);
+
+For viewing Table data
+
+Select * from TABLE_NAME;
